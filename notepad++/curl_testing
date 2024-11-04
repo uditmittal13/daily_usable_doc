@@ -1,1 +1,25 @@
 
+1. To fetch cookie detail in console on linux , use -c with file name
+
+curl  --request POST 'https://ip:443/api/2.0/fo/session/?action=login&username=USERNAME&password=PASSWORD' --header 'X-Requested-With: ScanTest' -c cookies.txt
+
+2. Reading cookies from a file. ( Best option to pass cookied from file -working tested)
+  
+curl -b cookies.txt https://www.google.com
+curl --location --request POST 'https://ip:443/api/2.0/fo/appliance/?action=list' --header 'X-Requested-With: ScanTest' -b cookies.txt
+
+3. how to pass cookie in curl command
+--below one tested
+curl --location --request POST 'https://ip:443/api/2.0/fo/appliance/?action=list' --header 'X-Requested-With: ScanTest' -b "Session=56b663aeb4e; SESSIONID=7100abc23bdddd228a"
+
+curl --cookie theme=dark https://www.google.com
+curl -b "token=abc123; session_id=456xyz" https://www.example.com/dashboard 
+
+4.
+
+
+## sample cookies.txt content
+
+Session 56b663aeb4e
+SESSIONID 7100abc23bdddd228a
+
