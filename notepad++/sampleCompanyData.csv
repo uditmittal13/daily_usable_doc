@@ -1,0 +1,52 @@
+CompanyName,Industry,Headquarters,Country,City,FoundedYear,Revenue_Billions,Employees,CEO,StockSymbol,MarketCap_Billions,Website,Products,Subsidiaries,RevenueGrowth_Percent,ProfitMargin_Percent,GlobalRank,KeyMarkets,ParentCompany,InnovationIndex
+Apple Inc.,Technology,Cupertino,USA,California,1976,394.3,164000,Tim Cook,AAPL,2800,apple.com,"iPhone, iPad, Mac, AirPods, Services",Beats Electronics,8,25.3,1,Worldwide,None,95
+Microsoft Corporation,Technology,Redmond,USA,Washington,1975,211.9,221000,Satya Nadella,MSFT,3100,microsoft.com,"Windows, Office 365, Azure, Xbox, Surface",LinkedIn,13,36.7,2,Worldwide,None,92
+Amazon.com Inc.,E-Commerce Retail,Seattle,USA,Washington,1994,574.8,1541000,Andy Jassy,AMZN,1600,amazon.com,"AWS, Prime, Alexa, Kindle, E-commerce",Whole Foods,11,2.4,3,Worldwide,None,88
+Alphabet Inc.,Technology,Mountain View,USA,California,1998,307.4,190234,Sundar Pichai,GOOGL,1800,google.com,"Google Search, Android, YouTube, Chrome, Cloud",Nest Labs,13,21.2,4,Worldwide,None,94
+Samsung Electronics,Electronics,Seoul,South Korea,Suwon,1938,244.3,267000,Kyung Kye-hyun,005930,280,samsung.com,"Smartphones, TVs, Semiconductors, Appliances",Harman,9,12.5,5,Worldwide,Samsung Group,89
+Tesla Inc.,Automotive,Austin,USA,Texas,2003,96.8,140000,Elon Musk,TSLA,800,tesla.com,"Electric Vehicles, Solar Panels, Energy Storage",SolarCity,51,10.8,6,Worldwide,None,91
+Meta Platforms,Technology,Menlo Park,USA,California,2004,134.9,86482,Mark Zuckerberg,META,1200,meta.com,"Facebook, Instagram, WhatsApp, VR/AR",Oculus,23,29.6,7,Worldwide,None,86
+NVIDIA Corporation,Semiconductors,Santa Clara,USA,California,1993,60.9,29600,Jensen Huang,NVDA,1800,nvidia.com,"GPUs, AI Chips, Gaming, Data Center",Mellanox,126,46.9,8,Worldwide,None,96
+Intel Corporation,Semiconductors,Santa Clara,USA,California,1968,79.0,131900,Pat Gelsinger,INTC,200,intel.com,"Processors, Chips, Data Center, AI",Mobileye,14,3.2,9,Worldwide,None,85
+Sony Corporation,Electronics Entertainment,Tokyo,Japan,Minato,1946,91.4,112700,Kenichiro Yoshida,SNE,110,sony.com,"PlayStation, Cameras, TVs, Music, Movies",Sony Pictures,13,8.5,10,Worldwide,None,87
+Toyota Motor Corporation,Automotive,Toyota,Japan,Aichi,1937,279.4,372817,Koji Sato,TM,250,toyota.com,"Cars, Trucks, Hybrid Vehicles, Lexus",Daihatsu,18,7.8,11,Worldwide,None,82
+Volkswagen AG,Automotive,Wolfsburg,Germany,Lower Saxony,1937,295.8,675800,Oliver Blume,VWAGY,90,volkswagen.com,"Cars, Trucks, Audi, Porsche, Lamborghini",Audi,12,3.5,12,Worldwide,None,79
+Nike Inc.,Apparel,Beaverton,USA,Oregon,1964,51.2,83000,John Donahoe,NKE,180,nike.com,"Shoes, Apparel, Sports Equipment",Converse,10,10.3,13,Worldwide,None,83
+Adidas AG,Apparel,Herzogenaurach,Germany,Bavaria,1949,24.0,62000,Bjørn Gulden,ADDYY,35,adidas.com,"Shoes, Apparel, Sports Equipment",Reebok,1,2.5,14,Worldwide,None,78
+Coca-Cola Company,Beverages,Atlanta,USA,Georgia,1892,43.0,700000,James Quincey,KO,260,coca-cola.com,"Soft Drinks, Juices, Water, Energy Drinks",Minute Maid,6,23.1,15,Worldwide,None,76
+PepsiCo Inc.,Beverages Food,Purchase,USA,New York,1898,91.5,315000,Ramon Laguarta,PEP,240,pepsico.com,"Soft Drinks, Snacks, Food Products",Frito-Lay,10,11.2,16,Worldwide,None,77
+Procter Gamble,Consumer Goods,Cincinnati,USA,Ohio,1837,82.0,107000,Jon Moeller,PG,370,pg.com,"Personal Care, Household Products, Health",Gillette,3,19.8,17,Worldwide,None,74
+Unilever,Consumer Goods,London,UK,Rotterdam,1929,64.3,127000,Hein Schumacher,UL,130,unilever.com,"Food, Personal Care, Home Care Products",Ben Jerry's,7,14.5,18,Worldwide,None,73
+Johnson Johnson,Pharmaceuticals,New Brunswick,USA,New Jersey,1886,94.9,152700,Joaquin Duato,JNJ,420,jnj.com,"Pharmaceuticals, Medical Devices, Consumer Health",Janssen,6,18.9,19,Worldwide,None,81
+L'Oréal,Cosmetics,Clichy,France,Hauts-de-Seine,1909,41.2,89383,Nicolas Hieronimus,LRLCY,240,loreal.com,"Cosmetics, Skincare, Hair Care, Fragrances",Maybelline,11,18.2,20,Worldwide,None,80
+BMW Group,Automotive,Munich,Germany,Bavaria,1916,142.6,149475,Oliver Zipse,BMWYY,85,bmw.com,"Luxury Cars, Motorcycles, Electric Vehicles",MINI,12,6.8,21,Worldwide,None,84
+Mercedes-Benz Group,Automotive,Stuttgart,Germany,Baden-Württemberg,1926,157.0,172425,Ola Källenius,MBGYY,75,mercedes-benz.com,"Luxury Cars, Commercial Vehicles, Trucks",AMG,12,7.2,22,Worldwide,None,86
+LG Electronics,Electronics,Seoul,South Korea,Yeouido,1958,68.1,75000,William Cho,066570,12,lg.com,"TVs, Appliances, Smartphones, Home Solutions",LG Display,2,2.8,23,Worldwide,LG Corporation,75
+Panasonic Corporation,Electronics,Osaka,Japan,Kadoma,1918,72.4,258637,Yuki Kusumi,6752,19,panasonic.com,"Electronics, Batteries, Automotive, Home Appliances",Sanyo,4,3.1,24,Worldwide,None,72
+Dell Technologies,Technology,Round Rock,USA,Texas,1984,101.2,133000,Michael Dell,DELL,70,dell.com,"Computers, Servers, Storage, IT Services",EMC Corporation,1,6.8,25,Worldwide,None,76
+HP Inc.,Technology,Palo Alto,USA,California,1939,63.0,61000,Enrique Lores,HPQ,30,hp.com,"Printers, PCs, Workstations, Supplies",Palm Inc,2,7.5,26,Worldwide,None,71
+Canon Inc.,Electronics,Tokyo,Japan,Ota,1937,31.4,197386,Fujio Mitarai,CAJ,27,canon.com,"Cameras, Printers, Medical Equipment, Office Solutions",Canon Medical,3,5.2,27,Worldwide,None,74
+Siemens AG,Industrial Automation,Munich,Germany,Bavaria,1847,78.0,320000,Roland Busch,SIEGY,130,siemens.com,"Industrial Automation, Energy, Healthcare, Mobility",Gamesa,8,9.3,28,Worldwide,None,85
+General Electric,Industrial Conglomerate,Boston,USA,Massachusetts,1892,74.8,172000,Larry Culp,GE,130,ge.com,"Aviation, Healthcare, Power, Renewable Energy",Baker Hughes,15,8.5,29,Worldwide,None,83
+Boeing Company,Aerospace Defense,Chicago,USA,Illinois,1916,66.6,156000,Dave Calhoun,BA,140,boeing.com,"Commercial Aircraft, Defense, Space Systems",Boeing Defense,8,5.2,30,Worldwide,None,88
+Airbus SE,Aerospace Defense,Toulouse,France,Haute-Garonne,1970,70.5,134000,Guillaume Faury,EADSY,120,airbus.com,"Commercial Aircraft, Helicopters, Defense, Space",Airbus Helicopters,11,6.8,31,Worldwide,None,89
+Caterpillar Inc.,Heavy Machinery,Deerfield,USA,Illinois,1925,67.1,113000,Jim Umpleby,CAT,160,caterpillar.com,"Construction Equipment, Mining, Engines, Power Systems",Bucyrus,17,13.2,32,Worldwide,None,79
+Schlumberger Limited,Oilfield Services,Houston,USA,Texas,1926,33.1,99000,Olivier Le Peuch,SLB,75,slb.com,"Oilfield Services, Equipment, Technology Solutions",Cameron,11,12.8,33,Worldwide,None,82
+3M Company,Industrial Conglomerate,Maplewood,USA,Minnesota,1902,32.7,96000,Mike Roman,MMM,60,mmm.com,"Industrial Products, Safety, Healthcare, Consumer Goods",Post-it,2,15.8,34,Worldwide,None,84
+Honeywell International,Industrial Conglomerate,Charlotte,USA,North Carolina,1906,36.6,95000,Vimal Kapur,HON,150,honeywell.com,"Aerospace, Building Technologies, Safety, Productivity",Elster,8,18.5,35,Worldwide,None,86
+Philips,Healthcare Technology,Amsterdam,Netherlands,North Holland,1891,19.4,82000,Roy Jakobs,PHG,22,philips.com,"Medical Equipment, Healthcare IT, Consumer Products",Respironics,2,8.9,36,Worldwide,None,81
+Medtronic plc,Medical Devices,Dublin,Ireland,Leinster,1949,31.2,95000,Geoff Martha,MDT,120,medtronic.com,"Medical Devices, Surgical Equipment, Diabetes Care",Covidien,3,18.2,37,Worldwide,None,85
+Abbott Laboratories,Medical Devices,Abbott Park,USA,Illinois,1888,43.7,115000,Robert Ford,ABT,190,abbott.com,"Medical Devices, Diagnostics, Nutrition, Pharmaceuticals",Alere,11,19.8,38,Worldwide,None,82
+Nestlé SA,Food Beverages,Vevey,Switzerland,Vaud,1866,99.9,270000,Ulf Mark Schneider,NSRGY,330,nestle.com,"Food, Beverages, Pet Care, Nutrition, Water",Purina,8,11.2,39,Worldwide,None,75
+The Kraft Heinz Company,Food Beverages,Chicago,USA,Illinois,2015,26.5,37000,Carlos Abrams-Rivera,KHC,45,kraftheinzcompany.com,"Food Products, Condiments, Beverages, Snacks",Oscar Mayer,0,12.5,40,Worldwide,Berkshire Hathaway,70
+Danone SA,Food Beverages,Paris,France,Île-de-France,1919,28.0,105000,Antoine de Saint-Affrique,DANOY,45,danone.com,"Dairy Products, Baby Food, Waters, Medical Nutrition",Activia,3,7.8,41,Worldwide,None,73
+IKEA,Retail Furniture,Delft,Netherlands,South Holland,1943,50.6,231000,Jesper Brodin,Private,70,ikea.com,"Furniture, Home Accessories, Kitchen Appliances",TaskRabbit,7,8.5,42,Worldwide,Ingka Group,72
+Home Depot Inc.,Retail,Atlanta,USA,Georgia,1978,157.4,475000,Ted Decker,HD,380,homedepot.com,"Home Improvement, Tools, Appliances, Building Materials",HD Supply,3,10.8,43,Worldwide,None,74
+Lowe's Companies,Retail,Mooresville,USA,North Carolina,1946,97.1,300000,Marvin Ellison,LOW,150,lowes.com,"Home Improvement, Tools, Appliances, Building Materials",Rona,4,8.2,44,Worldwide,None,71
+Best Buy Co.,Retail,Richfield,USA,Minnesota,1966,46.3,125000,Corie Barry,BBY,20,bestbuy.com,"Electronics, Appliances, Computers, Mobile Phones",Geek Squad,3,4.2,45,Worldwide,None,69
+Target Corporation,Retail,Minneapolis,USA,Minnesota,1902,107.6,450000,Brian Cornell,TGT,70,target.com,"General Merchandise, Groceries, Clothing, Electronics",Shipt,2,3.8,46,Worldwide,None,73
+Walmart Inc.,Retail,Bentonville,USA,Arkansas,1962,648.1,2300000,Doug McMillon,WMT,420,walmart.com,"Retail, Groceries, E-commerce, Wholesale",Sam's Club,6,2.4,47,Worldwide,None,78
+Costco Wholesale,Retail,Issaquah,USA,Washington,1983,242.3,304000,Ron Vachris,COST,300,costco.com,"Wholesale, Retail, Groceries, Electronics, Travel",Costco Travel,7,2.8,48,Worldwide,None,76
+Ford Motor Company,Automotive,Dearborn,USA,Michigan,1903,158.1,173000,Jim Farley,F,50,ford.com,"Cars, Trucks, SUVs, Electric Vehicles",Lincoln,11,5.2,49,Worldwide,None,78
+General Motors,Automotive,Detroit,USA,Michigan,1908,171.8,167000,Mary Barra,GM,60,gm.com,"Cars, Trucks, SUVs, Electric Vehicles",Cadillac,9,6.8,50,Worldwide,None,80
+
