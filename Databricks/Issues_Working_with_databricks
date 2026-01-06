@@ -1,0 +1,24 @@
+While working with Databricks, I noticed that most issues don’t come from Spark itself but from how Databricks is used.
+
+Here are some common Databricks mistakes data engineers make — and how to fix them.
+
+Mistake 1: Using all-purpose clusters for scheduled jobs
+Solution: Use job clusters with auto-termination for better isolation and lower cost.
+
+Mistake 2: Ignoring auto-termination settings
+Solution: Always configure aggressive auto-termination to avoid paying for idle clusters.
+
+Mistake 3: Treating Delta tables like plain Parquet
+Solution: Leverage Delta Lake features like ACID transactions, schema evolution, and time travel.
+
+Mistake 4: Poor file sizing and partitioning strategy
+Solution: Optimize file sizes (e.g., 128–512 MB) and partition only on high-cardinality access patterns.
+
+Mistake 5: No idempotency or retry logic
+Solution: Design pipelines to be re-runnable using merge logic, checkpoints, or overwrite-by-partition.
+
+Mistake 6: Missing monitoring and alerting
+Solution: Use job alerts, logs, and metrics so failures are caught by systems—not users.
+
+Key takeaway:
+Databricks is easy to start with, but production-grade pipelines require architectural discipline, not just Spark code.
