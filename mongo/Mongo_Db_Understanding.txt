@@ -54,3 +54,49 @@ Backups			Built-in		Manual / Ops Manager
 Monitoring		Built-in		External
 SLA				Yes				No (CE)
 Cost			Subscription	Infra + Ops cost
+
+
+
+## MongoDB Community Edition fully supports Standalone, Replica Set, and Sharded Cluster deployment types.
+Also, Sharded Cluster (Large Scale / High Throughput) Includes:
+mongos routers
+Config servers (replica set)
+Shard replica sets
+Horizontal scaling
+
+Typical Usage:-
+Very large datasets
+High write throughput
+Large concurrent users
+
+### Recommendation (Real-World) with respect to CE Edition
+Use Case	Best Choice (CE)
+Dev / POC	Standalone
+Production (most apps)	Replica Set (3 nodes)
+Very high scale	Sharded (with caution)
+
+
+### Is vertical scaling available in CE Edition.
+Yes — vertical scaling is available in MongoDB Community Edition, but it is manual, not automatic.
+Let me explain clearly 👇
+
+What is Vertical Scaling?
+Vertical scaling = increase resources of a node
+More CPU
+More RAM
+More Disk / IOPS
+
+MongoDB CE does not restrict vertical scaling. You can:
+Increase VM size
+Increase Kubernetes pod CPU / memory
+Expand disk size
+Move to faster storage (SSD → NVMe)
+
+####Is Horizontal scaling available in CE Edition ?
+Yes — horizontal scaling is available in MongoDB Community Edition (CE), but again it is manual, not automated.
+Let’s make it very clear 👇
+What is Horizontal Scaling?
+Horizontal scaling = add more nodes
+More replica set members (for HA/read scale)  > Known as Replica Set scaling
+More shards (for write & data scale)          > Sarded Cluster Scaling
+
