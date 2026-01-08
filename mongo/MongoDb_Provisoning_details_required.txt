@@ -1,0 +1,268 @@
+To provision a **MongoDB database instance in a private cloud (CloudXP / internal cloud platform)**, 
+you typically need details across **infrastructure, database configuration, security, operations, and governance**.
+
+
+## 1. Basic Request / Business Details
+
+These are usually mandatory before any technical provisioning.
+
+* **Project / Application Name**
+* **Environment**: Dev / QA / UAT / Prod
+* **Business Owner**
+* **Technical Owner / DBA Contact**
+* **Cost Center / Billing Code**
+* **Expected Go-Live Date**
+* **Criticality**: Low / Medium / High
+
+---
+
+## 2. Deployment Model Details
+
+Decide *how* MongoDB will be deployed.
+
+### MongoDB Type
+
+* ☐ Standalone (Dev only)
+* ☐ Replica Set (**recommended**)
+* ☐ Sharded Cluster (large scale / high throughput)
+
+### Platform
+
+* ☐ Kubernetes (StatefulSet)
+* ☐ Virtual Machines
+* ☐ Bare metal (rare)
+
+If Kubernetes:
+
+* Namespace name
+* Cluster name
+* Node pool / worker type
+
+---
+
+## 3. Compute & Storage Requirements
+
+### Compute
+
+* **CPU (per node)**: e.g., 2 / 4 / 8 cores
+* **Memory (per node)**: e.g., 8 / 16 / 32 GB
+* **Number of nodes**:
+
+  * ReplicaSet → 3 / 5 nodes
+  * Sharded → Config + Mongos + Shards
+
+### Storage
+
+* **Disk type**: SSD / NVMe / Network storage
+* **Disk size (per node)**: e.g., 100GB / 500GB
+* **IOPS requirement**
+* **Storage expansion**: Online resize (Yes/No)
+* **Separate disks for**:
+
+  * Data
+  * Journal
+  * Logs (recommended)
+
+---
+
+## 4. MongoDB Version & Configuration
+
+* **MongoDB version** (e.g., 6.0 / 7.0)
+* **WiredTiger compression**: snappy / zstd
+* **Journaling**: Enabled (Yes/No)
+* **Read Concern**: local / majority
+* **Write Concern**: w:1 / majority
+* **Default database name**
+* **Initial collections (optional)**
+
+---
+
+## 5. High Availability & DR
+
+### High Availability
+
+* ReplicaSet enabled (Yes/No)
+* Minimum nodes: **3 (odd number)**
+* Voting members configuration
+
+### Disaster Recovery
+
+* DR required (Yes/No)
+* DR type:
+
+  * ☐ Cross-AZ
+  * ☐ Cross-DC
+* RPO (Recovery Point Objective): e.g., 15 min
+* RTO (Recovery Time Objective): e.g., 1 hour
+
+---
+
+## 6. Backup & Restore Requirements
+
+* **Backup type**:
+
+  * ☐ Snapshot
+  * ☐ Logical (mongodump)
+  * ☐ Ops Manager / Cloud Manager
+* **Backup frequency**: Hourly / Daily
+* **Retention period**: 7 / 30 / 90 days
+* **Restore testing required**: Yes / No
+* **Point-in-Time Recovery (PITR)**: Yes / No
+
+---
+
+## 7. Security & Access Control
+
+### Authentication & Authorization
+
+* ☐ SCRAM
+* ☐ LDAP / Active Directory
+* ☐ x.509 certificates
+
+### Users & Roles
+
+* Admin users
+* Application users
+* Read-only users
+
+### Network Security
+
+* Allowed CIDRs / VPCs
+* Private endpoint required (Yes/No)
+* Service exposure:
+
+  * ☐ ClusterIP
+  * ☐ LoadBalancer
+  * ☐ Ingress (TLS)
+
+### Encryption
+
+* Encryption at rest (Yes/No)
+* Encryption in transit (TLS) (Yes/No)
+* Key management:
+
+  * ☐ KMS
+  * ☐ Vault
+  * ☐ Local keys
+
+---
+
+## 8. Connectivity Details
+
+* Connection type:
+
+  * Mongo URI
+  * SRV record
+* DNS name required
+* Port (default: 27017)
+* Application framework (Java / Python / Spark / Node.js)
+* Connection pool size
+* Read preference:
+
+  * primary
+  * secondaryPreferred
+
+---
+
+## 9. Monitoring, Logging & Alerts
+
+* Monitoring tool:
+
+  * ☐ Prometheus
+  * ☐ Mongo Ops Manager
+  * ☐ Custom
+* Metrics required:
+
+  * CPU / Memory
+  * Disk usage
+  * Replication lag
+  * Connections
+* Log retention period
+* Alert thresholds:
+
+  * Disk > 80%
+  * Replication lag
+  * Node down
+
+---
+
+## 10. Scaling & Performance
+
+* Expected data size (Year-1 / Year-3)
+* Expected TPS / QPS
+* Peak vs average load
+* Horizontal scaling required (Yes/No)
+* Auto-scaling allowed (Yes/No)
+* Index strategy responsibility (App / DBA)
+
+---
+
+## 11. Compliance & Governance
+
+* Data classification:
+
+  * Public / Internal / Confidential / PII
+* Compliance:
+
+  * ISO / SOC / GDPR
+* Audit logging required (Yes/No)
+* Data retention policy
+* Data masking needed (Yes/No)
+
+---
+
+## 12. Operations & Support
+
+* Support window: 24×7 / Business hours
+* Patch & upgrade ownership
+* SLA / SLO expectations
+* Incident escalation contacts
+* Change management approval required
+
+---
+
+## 13. Decommissioning & Lifecycle
+
+* Retention after app decommission
+* Secure wipe required (Yes/No)
+* Backup retention post-decommission
+* Resource cleanup confirmation
+
+---
+
+## 14. Optional (Automation / Self-Service)
+
+If CloudXP supports automation:
+
+* Terraform module version
+* Helm chart version (for Kubernetes)
+* Git repo for configuration
+* Approval workflow (Auto / Manual)
+
+---
+
+### ✅ Quick Summary (Minimal Mandatory Fields)
+
+If you want **bare minimum to start provisioning**:
+
+1. Environment (Dev/Prod)
+2. MongoDB type (ReplicaSet)
+3. Nodes, CPU, Memory, Disk
+4. MongoDB version
+5. Backup & retention
+6. Network access
+7. App owner & DBA contact
+
+---
+
+
+
+
+15. Comparison: Enterprise vs Community (Why Extra Details Matter)
+Area				Enterprise		Community
+Backups	Ops 		Manager			Manual
+Monitoring			Built-in		External
+Security			LDAP, Audit		Basic
+Encryption at rest	Native			OS-level
+Support				Vendor			Internal
+

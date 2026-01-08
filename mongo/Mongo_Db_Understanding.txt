@@ -1,0 +1,56 @@
+MongoDB CE (Community Edition)
+MongoDB Community Edition is the free, open-source version of MongoDB that you can install and manage yourself.
+
+MongoDB Community Edition – Key Points
+✅ Free to use
+✅ Self-managed (you run, secure, monitor, and back it up)
+❌ No enterprise features
+❌ No official MongoDB support or SLA
+
+What CE Includes
+Core MongoDB database
+Replica Sets
+Sharding
+WiredTiger storage engine
+SCRAM authentication
+TLS (manual setup)
+
+What CE Does NOT Include
+LDAP / Active Directory integration
+Native encryption at rest
+Advanced auditing
+Ops Manager (backup & monitoring)
+Enterprise support
+
+What is MongoDB Atlas?
+MongoDB Atlas is MongoDB’s fully managed Database-as-a-Service (DBaaS) provided by MongoDB itself.
+👉 Think of Atlas = MongoDB managed by MongoDB
+👉 While CE / EE = MongoDB managed by you
+
+In Simple Terms
+Term			Meaning
+CE				Community Edition – self-managed, free
+EE				Enterprise Edition – self-managed, paid
+Atlas			Fully managed MongoDB service
+
+What Atlas Provides (Out of the Box)
+You do NOT manage:
+Server provisioning
+MongoDB installation
+Upgrades & patching
+Backups & restores
+Monitoring & alerts
+Failover & scaling
+Security hardening
+MongoDB handles everything
+
+
+Ques.. Diff B/w Atlas v/s  ( CE/EE)
+				Atlas 	vs 		Self-Managed (CE / EE)
+Area			Atlas			CE / EE
+Management		MongoDB			Your team
+Upgrades		Automatic		Manual
+Backups			Built-in		Manual / Ops Manager
+Monitoring		Built-in		External
+SLA				Yes				No (CE)
+Cost			Subscription	Infra + Ops cost
