@@ -100,3 +100,14 @@ Horizontal scaling = add more nodes
 More replica set members (for HA/read scale)  > Known as Replica Set scaling
 More shards (for write & data scale)          > Sarded Cluster Scaling
 
+
+### DR ( Disaster Recovery)
+One-Line Summary
+
+DR defines where your MongoDB data survives a major outage (Cross-AZ or Cross-DC) and how much data (RPO) and time (RTO) loss the business can tolerate.
+
+Important Clarification (Very Common Confusion)
+Replica Set ≠ Full DR
+Replica Set = High Availability
+Cross-DC = Disaster Recovery
+
