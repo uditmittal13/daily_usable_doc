@@ -1,0 +1,273 @@
+# Kubernetes Commands – 
+# Complete Cluster & Service Operations Guide
+
+*(MongoDB on Kubernetes – Private Cloud)*
+
+---
+
+## 1️⃣ Cluster & Context Management (Very Important in Multi-Cluster Setup)
+
+```bash
+kubectl version
+kubectl cluster-info
+kubectl config get-contexts
+kubectl config current-context
+kubectl config use-context <context-name>
+kubectl config view
+```
+
+🔹 Used when you operate **dev / test / prod clusters**
+
+---
+
+## 2️⃣ Namespace Management (DB Isolation Best Practice)
+
+```bash
+kubectl get ns
+kubectl create ns mongodb
+kubectl delete ns mongodb
+kubectl describe ns mongodb
+```
+
+👉 **Always deploy MongoDB per namespace**
+Example:
+
+```
+mongodb-dev
+mongodb-prod
+mongodb-tenant-a
+```
+
+---
+
+## 3️⃣ Node & Infrastructure Commands
+
+```bash
+kubectl get nodes
+kubectl describe node <node-name>
+kubectl top nodes
+kubectl cordon <node-name>
+kubectl uncordon <node-name>
+kubectl drain <node-name> --ignore-daemonsets
+```
+
+👉 Used during:
+
+* Node maintenance
+* Disk / CPU pressure
+* MongoDB pod relocation
+
+---
+
+## 4️⃣ Core Workloads (MongoDB runs here)
+
+### Pods
+
+```bash
+kubectl get pods -n mongodb
+kubectl describe pod <pod-name> -n mongodb
+kubectl logs <pod-name> -n mongodb
+kubectl logs <pod-name> -n mongodb --previous
+kubectl exec -it <pod-name> -n mongodb -- bash
+```
+
+### StatefulSets (MongoDB **must** use this)
+
+```bash
+kubectl get sts -n mongodb
+kubectl describe sts mongo-rs -n mongodb
+kubectl scale sts mongo-rs --replicas=5 -n mongodb
+kubectl rollout status sts mongo-rs -n mongodb
+kubectl delete sts mongo-rs -n mongodb
+```
+
+---
+
+## 5️⃣ Service Management (Expose MongoDB)
+
+```bash
+kubectl get svc -n mongodb
+kubectl describe svc mongo -n mongodb
+kubectl delete svc mongo -n mongodb
+```
+
+Service types you’ll use:
+
+* `ClusterIP` (internal DB access)
+* `NodePort` (rare, internal testing)
+* `LoadBalancer` (cloud LB)
+* `Headless` (MongoDB replica discovery)
+
+---
+
+## 6️⃣ Persistent Storage (Critical for MongoDB)
+
+### Persistent Volumes & Claims
+
+```bash
+kubectl get pv
+kubectl get pvc -n mongodb
+kubectl describe pvc mongo-pvc -n mongodb
+kubectl delete pvc mongo-pvc -n mongodb
+```
+
+### Storage Classes
+
+```bash
+kubectl get sc
+kubectl describe sc fast-ssd
+```
+
+👉 **Never delete PVCs casually** – data loss risk
+
+---
+
+## 7️⃣ ConfigMaps & Secrets (Mongo Credentials & Config)
+
+### ConfigMaps
+
+```bash
+kubectl get cm -n mongodb
+kubectl describe cm mongo-config -n mongodb
+kubectl delete cm mongo-config -n mongodb
+```
+
+### Secrets
+
+```bash
+kubectl get secret -n mongodb
+kubectl describe secret mongo-secret -n mongodb
+kubectl create secret generic mongo-secret \
+  --from-literal=username=admin \
+  --from-literal=password=StrongPass123 \
+  -n mongodb
+```
+
+👉 Store:
+
+* Root credentials
+* Keyfile for replica set auth
+* TLS certs
+
+---
+
+## 8️⃣ Networking & Access Control
+
+### Network Policies (Strongly Recommended)
+
+```bash
+kubectl get netpol -n mongodb
+kubectl describe netpol mongo-netpol -n mongodb
+```
+
+👉 Restrict DB access to:
+
+* Backend services
+* Specific namespaces
+
+---
+
+## 9️⃣ Security & RBAC (DBaaS Platform Level)
+
+```bash
+kubectl get sa -n mongodb
+kubectl get roles -n mongodb
+kubectl get rolebindings -n mongodb
+
+kubectl describe role mongo-role -n mongodb
+kubectl describe rolebinding mongo-binding -n mongodb
+```
+
+👉 Needed for:
+
+* Automation
+* Backup jobs
+* Operators
+
+---
+
+## 🔟 Health, Debugging & Monitoring
+
+```bash
+kubectl get events -n mongodb --sort-by=.metadata.creationTimestamp
+kubectl top pods -n mongodb
+kubectl describe pod <pod-name> -n mongodb
+kubectl get endpoints -n mongodb
+```
+
+---
+
+## 1️⃣1️⃣ Backup / Restore / Jobs
+
+### Jobs & CronJobs
+
+```bash
+kubectl get jobs -n mongodb
+kubectl get cronjobs -n mongodb
+kubectl describe job mongo-backup -n mongodb
+kubectl delete job mongo-backup -n mongodb
+```
+
+👉 Used for:
+
+* `mongodump`
+* Scheduled backups
+* Restore pipelines
+
+---
+
+## 1️⃣2️⃣ Helm (If Using MongoDB Operator or Charts)
+
+```bash
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+
+helm install mongo bitnami/mongodb -n mongodb
+helm upgrade mongo bitnami/mongodb -n mongodb
+helm uninstall mongo -n mongodb
+helm list -n mongodb
+```
+
+---
+
+## 1️⃣3️⃣ MongoDB-Specific Operations (Inside Pod)
+
+```bash
+kubectl exec -it mongo-0 -n mongodb -- mongosh
+rs.status()
+rs.initiate()
+rs.add("mongo-3.mongo.mongodb.svc.cluster.local:27017")
+```
+
+---
+
+## 1️⃣4️⃣ Disaster & Cleanup Commands (Use Carefully ⚠️)
+
+```bash
+kubectl delete pod mongo-0 -n mongodb
+kubectl delete sts mongo-rs -n mongodb
+kubectl delete pvc --all -n mongodb   # DATA LOSS
+kubectl delete ns mongodb             # FULL WIPE
+```
+
+---
+
+## 1️⃣5️⃣ One-Line “Admin Handy Commands”
+
+```bash
+kubectl get all -n mongodb
+kubectl get pods -o wide -n mongodb
+kubectl api-resources
+kubectl explain statefulset
+```
+
+---
+
+# Recommended Architecture for MongoDB on Kubernetes
+
+✔ **StatefulSet**
+✔ **Headless Service**
+✔ **PVC per pod**
+✔ **MongoDB Operator (optional but best)**
+✔ **TLS + RBAC + NetworkPolicy**
+
