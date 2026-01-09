@@ -1,0 +1,304 @@
+Below is a **complete, practical cheat-sheet of MongoDB commands specifically for Kubernetes**, covering **cluster setup, deployment, scaling, backup, troubleshooting, and day-2 operations**.
+This is written assuming **MongoDB Community Edition on Kubernetes**
+
+---
+
+# 🧩 1. Kubernetes Cluster – Basic Commands (Mongo-related ops)
+
+```bash
+kubectl cluster-info
+kubectl get nodes
+kubectl get namespaces
+kubectl create namespace mongodb
+kubectl config set-context --current --namespace=mongodb
+```
+
+---
+
+# 📦 2. MongoDB Deployment on Kubernetes
+
+## Option A – Standalone MongoDB (Dev / POC)
+
+### Deployment
+
+```bash
+kubectl create deployment mongo \
+  --image=mongo:7.0
+```
+
+### Expose MongoDB
+
+```bash
+kubectl expose deployment mongo \
+  --type=ClusterIP \
+  --port=27017
+```
+
+### Verify
+
+```bash
+kubectl get pods
+kubectl get svc
+```
+
+---
+
+## Option B – MongoDB Replica Set (Recommended)
+
+### StatefulSet (Best Practice)
+
+```bash
+kubectl apply -f mongo-statefulset.yaml
+kubectl apply -f mongo-service.yaml
+```
+
+### Check Pods
+
+```bash
+kubectl get statefulsets
+kubectl get pods -l app=mongo
+```
+
+---
+
+# 💾 3. Persistent Storage Commands
+
+```bash
+kubectl get pv
+kubectl get pvc
+kubectl describe pvc mongo-pvc
+```
+
+Delete PVC (⚠ data loss):
+
+```bash
+kubectl delete pvc mongo-pvc
+```
+
+---
+
+# 🔐 4. Secrets & ConfigMaps (Mongo Credentials)
+
+### Create Secret
+
+```bash
+kubectl create secret generic mongo-secret \
+  --from-literal=username=admin \
+  --from-literal=password=admin123
+```
+
+### View Secret
+
+```bash
+kubectl get secret mongo-secret
+kubectl describe secret mongo-secret
+```
+
+---
+
+# 🔌 5. Connect to MongoDB in Kubernetes
+
+### From Inside Pod
+
+```bash
+kubectl exec -it mongo-0 -- mongosh
+```
+
+With auth:
+
+```bash
+kubectl exec -it mongo-0 -- mongosh -u admin -p admin123
+```
+
+---
+
+### Port Forward (Local Access)
+
+```bash
+kubectl port-forward svc/mongo 27017:27017
+```
+
+Then connect locally:
+
+```bash
+mongosh mongodb://localhost:27017
+```
+
+---
+
+# 🔁 6. MongoDB Replica Set Commands (Inside Pod)
+
+```bash
+rs.status()
+rs.initiate()
+```
+
+Add members:
+
+```javascript
+rs.add("mongo-1.mongo:27017")
+rs.add("mongo-2.mongo:27017")
+```
+
+Check primary:
+
+```javascript
+rs.isMaster()
+```
+
+---
+
+# 📈 7. Scaling MongoDB in Kubernetes
+
+### Scale Replica Set
+
+```bash
+kubectl scale statefulset mongo --replicas=3
+```
+
+Check pods:
+
+```bash
+kubectl get pods
+```
+
+⚠ MongoDB **must also be added to replica set config**
+
+---
+
+# 🧪 8. Health Checks & Troubleshooting
+
+### Pod Logs
+
+```bash
+kubectl logs mongo-0
+kubectl logs mongo-0 --previous
+```
+
+### Describe Pod
+
+```bash
+kubectl describe pod mongo-0
+```
+
+### Exec into Pod
+
+```bash
+kubectl exec -it mongo-0 -- /bin/bash
+```
+
+---
+
+# 🔄 9. Backup & Restore in Kubernetes
+
+## Backup
+
+```bash
+kubectl exec mongo-0 -- \
+  mongodump --out /data/backup
+```
+
+Copy backup to local:
+
+```bash
+kubectl cp mongodb/mongo-0:/data/backup ./backup
+```
+
+---
+
+## Restore
+
+```bash
+kubectl cp ./backup mongodb/mongo-0:/data/backup
+```
+
+```bash
+kubectl exec mongo-0 -- \
+  mongorestore /data/backup
+```
+
+---
+
+# 🌐 10. Exposing MongoDB Outside Cluster
+
+### NodePort
+
+```bash
+kubectl expose statefulset mongo \
+  --type=NodePort \
+  --port=27017
+```
+
+### LoadBalancer (Cloud)
+
+```bash
+kubectl expose statefulset mongo \
+  --type=LoadBalancer \
+  --port=27017
+```
+
+---
+
+# 🔐 11. Security Best Practices (K8s + Mongo)
+
+```bash
+kubectl apply -f network-policy.yaml
+kubectl apply -f mongo-tls-secret.yaml
+```
+
+Enable auth:
+
+```yaml
+--auth
+```
+
+---
+
+# 📊 12. Monitoring & Resource Control
+
+### Resource Usage
+
+```bash
+kubectl top pods
+kubectl top nodes
+```
+
+### Limits & Requests (YAML)
+
+```yaml
+resources:
+  requests:
+    cpu: "500m"
+    memory: "1Gi"
+  limits:
+    cpu: "1"
+    memory: "2Gi"
+```
+
+---
+
+# 🧹 13. Cleanup Commands
+
+```bash
+kubectl delete statefulset mongo
+kubectl delete svc mongo
+kubectl delete pvc mongo-pvc
+kubectl delete namespace mongodb
+```
+
+---
+
+# 🧠 14. Real-World Production Setup (Recommended)
+
+| Component    | Recommended              |
+| ------------ | ------------------------ |
+| MongoDB Type | Replica Set              |
+| K8s Object   | StatefulSet              |
+| Storage      | PVC (SSD)                |
+| Auth         | Enabled                  |
+| Backup       | CronJob                  |
+| Monitoring   | Prometheus + Exporter    |
+| Scaling      | Horizontal (Replica Set) |
+
+---
+

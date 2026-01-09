@@ -1,0 +1,391 @@
+Below is a **complete, practical list of MongoDB terminal (mongosh) commands**, grouped so you can use it as a **cheat-sheet for admin + developer + ops**.
+These are commands you run **inside MongoDB shell (`mongosh`)** or from terminal.
+
+---
+
+# 🟢 1️⃣ Start MongoDB Shell (Terminal)
+
+```bash
+mongosh
+```
+
+Remote:
+
+```bash
+mongosh "mongodb://host:27017"
+```
+
+With auth:
+
+```bash
+mongosh -u admin -p password --authenticationDatabase admin
+```
+
+Replica set:
+
+```bash
+mongosh "mongodb://mongo-0,mongo-1,mongo-2/?replicaSet=rs0"
+```
+
+---
+
+# 🗂️ 2️⃣ Database Commands
+
+```javascript
+show dbs
+use mydb
+db
+```
+
+Drop database:
+
+```javascript
+db.dropDatabase()
+```
+
+Database stats:
+
+```javascript
+db.stats()
+```
+
+---
+
+# 📁 3️⃣ Collection Commands
+
+```javascript
+show collections
+```
+
+Create:
+
+```javascript
+db.createCollection("users")
+```
+
+Drop:
+
+```javascript
+db.users.drop()
+```
+
+Stats:
+
+```javascript
+db.users.stats()
+```
+
+Rename:
+
+```javascript
+db.users.renameCollection("customers")
+```
+
+---
+
+# ✍️ 4️⃣ Insert Commands
+
+```javascript
+db.users.insertOne({ name: "Udit", age: 30 })
+```
+
+```javascript
+db.users.insertMany([
+  { name: "A", age: 25 },
+  { name: "B", age: 35 }
+])
+```
+
+---
+
+# 🔍 5️⃣ Read / Query Commands
+
+```javascript
+db.users.find()
+db.users.findOne()
+```
+
+Filter:
+
+```javascript
+db.users.find({ age: { $gt: 30 } })
+```
+
+Projection:
+
+```javascript
+db.users.find({}, { name: 1, _id: 0 })
+```
+
+Sort:
+
+```javascript
+db.users.find().sort({ age: -1 })
+```
+
+Limit & Skip:
+
+```javascript
+db.users.find().limit(5).skip(10)
+```
+
+Count:
+
+```javascript
+db.users.countDocuments()
+```
+
+---
+
+# ✏️ 6️⃣ Update Commands
+
+```javascript
+db.users.updateOne(
+  { name: "Udit" },
+  { $set: { age: 31 } }
+)
+```
+
+```javascript
+db.users.updateMany(
+  { age: { $gt: 30 } },
+  { $set: { senior: true } }
+)
+```
+
+Upsert:
+
+```javascript
+db.users.updateOne(
+  { name: "C" },
+  { $set: { age: 22 } },
+  { upsert: true }
+)
+```
+
+Replace:
+
+```javascript
+db.users.replaceOne(
+  { name: "Udit" },
+  { name: "Udit", age: 32 }
+)
+```
+
+---
+
+# ❌ 7️⃣ Delete Commands
+
+```javascript
+db.users.deleteOne({ name: "A" })
+```
+
+```javascript
+db.users.deleteMany({ age: { $lt: 25 } })
+```
+
+---
+
+# 🧮 8️⃣ Aggregation Commands
+
+```javascript
+db.orders.aggregate([
+  { $match: { status: "completed" } },
+  { $group: { _id: "$userId", total: { $sum: "$amount" } } }
+])
+```
+
+Common stages:
+
+```text
+$match, $group, $project, $sort, $limit, $lookup, $unwind
+```
+
+---
+
+# 📇 9️⃣ Index Commands
+
+Create:
+
+```javascript
+db.users.createIndex({ name: 1 })
+```
+
+Compound:
+
+```javascript
+db.users.createIndex({ name: 1, age: -1 })
+```
+
+List:
+
+```javascript
+db.users.getIndexes()
+```
+
+Drop:
+
+```javascript
+db.users.dropIndex("name_1")
+```
+
+---
+
+# 🔐 🔑 1️⃣0️⃣ User & Role Commands
+
+Create user:
+
+```javascript
+db.createUser({
+  user: "appuser",
+  pwd: "pass123",
+  roles: [{ role: "readWrite", db: "mydb" }]
+})
+```
+
+List users:
+
+```javascript
+db.getUsers()
+```
+
+Drop user:
+
+```javascript
+db.dropUser("appuser")
+```
+
+---
+
+# 🔁 1️⃣1️⃣ Replica Set Commands
+
+```javascript
+rs.status()
+rs.conf()
+```
+
+Initiate:
+
+```javascript
+rs.initiate()
+```
+
+Add member:
+
+```javascript
+rs.add("host2:27017")
+```
+
+Remove:
+
+```javascript
+rs.remove("host2:27017")
+```
+
+Primary info:
+
+```javascript
+rs.isMaster()
+```
+
+---
+
+# 🌐 1️⃣2️⃣ Sharding Commands
+
+```javascript
+sh.status()
+```
+
+```javascript
+sh.enableSharding("mydb")
+```
+
+```javascript
+sh.shardCollection("mydb.users", { _id: 1 })
+```
+
+---
+
+# 📊 1️⃣3️⃣ Monitoring & Performance
+
+Current ops:
+
+```javascript
+db.currentOp()
+```
+
+Kill op:
+
+```javascript
+db.killOp(opid)
+```
+
+Explain:
+
+```javascript
+db.users.find({ age: 30 }).explain("executionStats")
+```
+
+Server stats:
+
+```javascript
+db.serverStatus()
+```
+
+---
+
+# 💾 1️⃣4️⃣ Backup & Restore (Terminal)
+
+Backup:
+
+```bash
+mongodump --db mydb --out backup/
+```
+
+Restore:
+
+```bash
+mongorestore --db mydb backup/mydb
+```
+
+---
+
+# 🛠️ 1️⃣5️⃣ Admin / Maintenance Commands
+
+```javascript
+db.shutdownServer()
+db.repairDatabase()
+```
+
+Compact collection:
+
+```javascript
+db.runCommand({ compact: "users" })
+```
+
+---
+
+# ❓ 1️⃣6️⃣ Help Commands
+
+```javascript
+help
+db.help()
+db.users.help()
+```
+
+---
+
+# 🧠 One-Line Summary
+
+> **MongoDB terminal commands** include database, collection, CRUD, indexing, aggregation, security, replica set, sharding, monitoring, and backup operations — all executed via `mongosh` or CLI tools like `mongodump`.
+
+---
+
+If you want next, I can give:
+
+* **MongoDB commands mapped to Kubernetes**
+* **MongoDB admin vs developer command split**
+* **MongoDB interview questions (command-based)**
+* **Day-2 ops runbook commands**
+
+Just say 👍
