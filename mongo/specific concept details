@@ -1,0 +1,11 @@
+##Node Affinity v/s Pod affinity/anti-affinity
+
+**Pod affinity tells Kubernetes to schedule a pod close to (or on the same node/zone as) other specific pods based on labels.**
+**Pod anti-affinity tells Kubernetes to schedule a pod away from other specific pods (based on labels), ensuring they don’t run on the same node or zone.**
+
+Node affinity restricts MongoDB pods to specific worker nodes based on node labels, ensuring performance, isolation, and compliance.
+Node affinity tells Kubernetes:👉 “This pod can (or should) run only on certain nodes.”
+It controls which worker nodes a pod is allowed or preferred to be scheduled on
+
+Why Pod anti-affinity comes in pciture?
+to achieve fault tolerance, high-availability, Survives in case of any node failure, Critical, keeps pods separate
