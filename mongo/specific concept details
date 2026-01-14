@@ -59,3 +59,19 @@ What this means ( understanding of terms used in pod anti affinity)
 
 ### Why we still use stateful set for pod anti-affinity-   One-line summary (again, distilled)
 Pod anti-affinity is configured under statefulSet because MongoDBCommunity is an abstraction, and the actual MongoDB pods are created and scheduled by a StatefulSet managed by the operator.
+
+
+
+### What does READY 2/2 mean , when execute kubectl get pods -n namespace?
+mongo-test-0   2/2   Running
+READY = <ready containers> / <total containers in the pod>
+    Why MongoDB pods have 2 containers
+    MongoDB operator pods usually contain:
+    Container   	     Purpose
+    mongod	           MongoDB database process
+    mongodb-agent	     Automation / monitoring age
+
+### how to validate pod running on which node ???
+Just need to add -o wide at the end of pods command , i will show Ip and node name
+kubectl get pods -n namespace -o wide
+
