@@ -75,3 +75,9 @@ READY = <ready containers> / <total containers in the pod>
 Just need to add -o wide at the end of pods command , i will show Ip and node name
 kubectl get pods -n namespace -o wide
 
+
+
+
+#### how to manage node availability for maintenance ??? ( Cordon/Uncordon/drain)
+In Kubernetes, cordon, uncordon, and drain are commands to manage node availability for maintenance: cordon marks a node as unschedulable (no new pods, existing run), drain cordons and then gracefully evicts all pods (except DaemonSets) for shutdown/upgrade, and uncordon reverses a cordon, making the node schedulable again
+
