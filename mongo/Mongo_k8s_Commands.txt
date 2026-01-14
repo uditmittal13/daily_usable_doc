@@ -2,11 +2,17 @@ Below is a **complete, practical cheat-sheet of MongoDB commands specifically fo
 This is written assuming **MongoDB Community Edition on Kubernetes**
 
 ---
-Ques how to vlaidate pod running on which node?
+Ques how to vlaidate pod running on which node???
 kubectl get pods -n mongod -o watch
 
-Ques can we watch real time events in namespace? ( observe real time events like pod scheduling/terminating/deleting/rescheduling inetead of final state)
+Ques can we watch real time events in namespace??? ( observe real time events like pod scheduling/terminating/deleting/rescheduling inetead of final state)
 kubectl get events -n mongod --watch
+  Similare question:- how to Watch only scheduling-related events (filtered) ??? ( only need to add field selector)
+kubectl get events -n mongod --field-selector reason=FailedScheduling  --watch
+
+Ques how to  Watch pod status transitions live ( this will show live pods changes w.r.t namesapce) --just add -w
+kubectl get pods -n mongod -w
+
 
 
 # 🧩 1. Kubernetes Cluster – Basic Commands (Mongo-related ops)
@@ -307,5 +313,6 @@ kubectl delete namespace mongodb
 | Scaling      | Horizontal (Replica Set) |
 
 ---
+
 
 
