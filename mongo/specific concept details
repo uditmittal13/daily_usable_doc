@@ -1,5 +1,8 @@
 ##Node Affinity v/s Pod affinity/anti-affinity
 
+One-line summary
+Affinity brings pods closer; anti-affinity pushes pods apart — MongoDB needs anti-affinity for high availability
+
 **Pod affinity tells Kubernetes to schedule a pod close to (or on the same node/zone as) other specific pods based on labels.**
 **Pod anti-affinity tells Kubernetes to schedule a pod away from other specific pods (based on labels), ensuring they don’t run on the same node or zone.**
 
@@ -7,5 +10,52 @@ Node affinity restricts MongoDB pods to specific worker nodes based on node labe
 Node affinity tells Kubernetes:👉 “This pod can (or should) run only on certain nodes.”
 It controls which worker nodes a pod is allowed or preferred to be scheduled on
 
+Also, there is no concept of node-anti-affinity.
+Anti-affinity” is only a pod-level concept
+Nodes don’t have “relationships” with other nodes → hence no node anti-affinity object, 
+But 👍 the behavior people usually mean by “node anti-affinity” does exist — it’s achieved using node affinity with NotIn / DoesNotExist operators. 
+
 Why Pod anti-affinity comes in pciture?
 to achieve fault tolerance, high-availability, Survives in case of any node failure, Critical, keeps pods separate
+
+
+##### Examples step by step:- ( yaml changes --or part to add in yaml)
+A. Node Affinity :- Controls which nodes a pod can run on.
+  Example: “Run MongoDB only on SSD nodes.”
+
+nodeAffinity:
+  requiredDuringSchedulingIgnoredDuringExecution:
+    nodeSelectorTerms:
+    - matchExpressions:
+      - key: disk
+        operator: In
+        values:
+        - ssd
+
+🔹 B. Pod Affinity:- Controls which pods a pod should run with.
+ Example: “Run app pods close to MongoDB pods.”
+podAffinity:
+  requiredDuringSchedulingIgnoredDuringExecution:
+  - labelSelector:
+      matchLabels:
+        app: mongodb
+    topologyKey: kubernetes.io/hostname
+
+🔹 C. Pod Anti-Affinity :- Controls which pods a pod should run away from.
+Example: “Never place two MongoDB replicas on the same node.”
+
+podAntiAffinity:
+  requiredDuringSchedulingIgnoredDuringExecution:
+  - labelSelector:
+      matchLabels:
+        app: mongo-test
+    topologyKey: kubernetes.io/hostname
+
+What this means ( understanding of terms used in pod anti affinity)
+--required… → hard rule  , prefered -> soft rule
+--kubernetes.io/hostname → one pod per node    ( very important term passed in topologykey , 'kubernetes.io/hostname' is the label attached with each node having node ipaddess)
+--app: mongo-test → applies only to this ReplicaSet
+
+
+### Why we still use stateful set for pod anti-affinity-   One-line summary (again, distilled)
+Pod anti-affinity is configured under statefulSet because MongoDBCommunity is an abstraction, and the actual MongoDB pods are created and scheduled by a StatefulSet managed by the operator.
