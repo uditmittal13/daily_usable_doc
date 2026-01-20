@@ -26,6 +26,10 @@ kubectl get sa,role,rolebinding -n default
 ## Also, to check current namespace > if empty print--means working in default namespace.
 kubectl config view --minify | grep namespace
 
+Note:- From commands prespective, treat mongodbcommunity resource similar to pod,,, in case any mdbcommunity resource failed, to check exact faiure reason...cmd similar to pod command.
+> kubetcl describe pod podname -n namespace
+> kubectl describe mongodbcommunity mongocluster2 -n mongod2
+
 ***
 
 Ques how to vlaidate pod running on which node???  (just need to add -o wide)
@@ -339,6 +343,7 @@ kubectl delete namespace mongodb
 | Scaling      | Horizontal (Replica Set) |
 
 ---
+
 
 
 
