@@ -6,6 +6,19 @@ This is written assuming **MongoDB Community Edition on Kubernetes**
 -w     >  to see live changes
 -watch >  to see live events with get events commands
 --
+
+*** Ques how can we apply multiple yaml files in single command???
+Many ways:-  
+1. using kucustomize configuration management tool  ( Kustomize is a built-in Kubernetes tool for managing configurations that lets you define all resources in a directory via a kustomization.yaml file. You can apply everything in that directory with a single command.)
+cmd>  kubectl apply -k directory_name
+OR 
+kubectl apply -f ./
+# or
+kubectl apply -f <directory-name> --recursive
+OR
+kubectl apply -f file1.yaml,file2.yaml,file3.yaml
+***
+
 Ques how to vlaidate pod running on which node???  (just need to add -o wide)
 kubectl get pods -n mongod -o wide
 
@@ -317,6 +330,7 @@ kubectl delete namespace mongodb
 | Scaling      | Horizontal (Replica Set) |
 
 ---
+
 
 
 
