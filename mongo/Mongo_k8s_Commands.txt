@@ -17,6 +17,15 @@ kubectl apply -f ./
 kubectl apply -f <directory-name> --recursive
 OR
 kubectl apply -f file1.yaml,file2.yaml,file3.yaml
+
+Note:- If by mistake applie without namespace -> can revert via below commands.
+kubectl delete -k directorName/
+Also , can verify if still exists or not
+kubectl get sa,role,rolebinding -n default
+
+## Also, to check current namespace > if empty print--means working in default namespace.
+kubectl config view --minify | grep namespace
+
 ***
 
 Ques how to vlaidate pod running on which node???  (just need to add -o wide)
@@ -330,6 +339,7 @@ kubectl delete namespace mongodb
 | Scaling      | Horizontal (Replica Set) |
 
 ---
+
 
 
 
