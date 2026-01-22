@@ -3,6 +3,17 @@
 
 *(MongoDB on Kubernetes – Private Cloud)*
 
+
+---
+Ques how to validate/check node wise cpu/memory availability
+
+## Check how much CPU is already REQUESTED on each node (very useful). This shows how much CPU is reserved (not actual usage). Check free CPU for scheduling
+kubectl describe node <node-name> | grep -A5 -i "Allocated resources"
+   Free CPU ≈ Allocatable - Requested
+
+## check cpu capacity and allocatable on each node.
+kubectl get nodes -o custom-columns=NAME:.metadata.name,CPU-CAPACITY:.status.capacity.cpu,CPU-ALLOCATABLE:.status.allocatable.cpu
+
 ---
 
 ## 1️⃣ Cluster & Context Management (Very Important in Multi-Cluster Setup)
@@ -270,4 +281,5 @@ kubectl explain statefulset
 ✔ **PVC per pod**
 ✔ **MongoDB Operator (optional but best)**
 ✔ **TLS + RBAC + NetworkPolicy**
+
 
