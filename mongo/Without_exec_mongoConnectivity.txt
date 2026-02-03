@@ -1,0 +1,171 @@
+
+Task:- Explored connect to mongo client without exec.
+Ans:- Use the MongoDB Service (ClusterIP), port-forward, NodePort, or LoadBalancer to connect to MongoDB externally; do not rely on kubectl exec for real client connections.
+			BEST PRACTICE FOR YOU (given your setup)
+			For now:
+			✅ Use Port-forward for testing
+			✅ Use ClusterIP for in-cluster apps
+			❌ Avoid NodePort in production
+			❌ Avoid kubectl exec for apps
+
+Option 1 -- using cluster Ip Service ( Inside the cluster )
+
+##First get the service name
+kubectl get svc -n mongod2
+
+## As cluster Ip Not available---means its headless service. In case of headless service- you should pass all hosts ( below url worked)
+
+kubectl run mongo-client --rm -it --image=mongo:6.0 --restart=Never -n mongod2 -- mongosh "mongodb://orders_app_user:Orders%40123@mongocluster2-0.mongocluster2-svc.mongod2.svc.cluster.local:27017,mongocluster2-1.mongocluster2-svc.mongod2.svc.cluster.local:27017,mongocluster2-2.mongocluster2-svc.mongod2.svc.cluster.local:27017/orders?replicaSet=mongocluster2"
+
+Note:- 
+** --rm -it -> delete the pod automatically after it exits. he mongo-client pod is temporary and gets deleted when mongosh exits.
+** --restart=Never -> To prevent it from restarting
+** --rm -> To auto-clean the client pod
+** -it  -> To interact with mongosh
+** In pwd Orders@123 -> @ replaced with %40. ( encoded).
+** Any of these 8 characters must be URL-encoded in MongoDB URLs: ( @ : / ? # [ ] % )
+
+
+Option 2 --  Port-forward (quick test from your laptop) ( unable to test - as mongosh is not installed on machine)
+
+## port forward 
+kubectl port-forward svc/mongocluster2-svc -n mongod2 27017:27017
+## now from your laptop:-
+   mongosh "mongodb://orders_app_user:Orders@123@localhost:27017/orders?replicaSet=mongocluster2"
+
+Option 3 -- NodePort (simple external access)
+
+## Expose MongoDB: ( --name indicates the name by which this service will expose )
+kubectl expose svc mongocluster2-svc -n mongod2 --type=NodePort --name=mongocluster2-nodeport 
+
+## get port of exposed service
+	kubectl get svc -n mongod2 mongocluster2-nodeport
+Output:- 
+root@dnddbaas2609m0:/home/k8user/udit# kubectl get svc -n mongod2 mongocluster2-nodeport
+NAME                     TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)           AGE
+mongocluster2-nodeport   NodePort   10.96.112.67   <none>        27017:31969/TCP   7m44s
+
+ 
+## connect via mongosh
+   mongosh "mongodb://orders_app_user:Orders@123@<any-worker-node-ip>:<exposed-port>/orders?replicaSet=mongocluster2"
+In this case ex:- mongosh "mongodb://orders_app_user:Orders@123@<any-worker-node-ip>:31969/orders?replicaSet=mongocluster2"
+
+
+Option 4 -- LoadBalancer / Ingress (production-grade)If you have a LB:
+ Note:- To connect externally in production, create one LoadBalancer (or NodePort) service per MongoDB pod and use all their external IPs in the MongoDB connection string; never expose a single LB for a ReplicaSet.			
+			
+mongodb://orders_app_user:Orders%40123@192.168.44.0:27017/orders?replicaSet=mongocluster2
+
+
+
+
+
+Error log using mongo shell from local:-
+
+
+Finally connected from local system:- 
+A) 
+B) This securely forwards a local port to the K8s NodePort via the jump server.
+   Run this on your local system:
+   ssh -L 30181:10.157.237.111:30181 adminuser@10.145.44.123    ( this will pop up for password of jump server)
+   Explanation:
+   Local:30181  --->  Jump Server  --->  10.157.237.111:30181
+   Now, from your local machine, connect to MongoDB like this:
+   mongosh --host 127.0.0.1 --port 30181
+   
+   111 - k8 master node.( where we exposed service basically)
+   123 - jump server--having connectivity to k8 master node.
+   local machine -> 30181 - port connected.
+   
+   
+ ssh -L 30181:10.157.237.111:serviceExposedPort jumpserveruser@jumpserverIp
+ ssh -L 30181:10.157.237.111:30181 adminuser@10.145.44.123  ( this worked )
+ 
+ ssh -L 31969:10.157.237.111:31969 adminuser@10.145.44.123  ( Ussing this node port combination now )-- 30181 nodeportservice deleted- by mistake 2 node-port service created for same cluster service
+ 
+C) Tried via mongoshell by passing mongodbconnectionString
+
+   mongosh "mongodb://admin:Admin%40123@localhost:30181/admin?directConnection=true"
+Used below connectig string via mongo shell from local machine:- ( worked )
+	mongodb://admin:Admin%40123@localhost:30181/admin?directConnection=true   (was  working but will not work now because service with this port deleted)
+	mongodb://admin:Admin%40123@localhost:31969/admin?directConnection=true   ( wokring )
+Will Try to connect with orders database also directly from local macine   
+    mongodb://orders_app_user:Orders%40123@localhost:31969/orders?directConnection=true	( it also working show only orders database, tried write--not worked showing its not primary.)
+Will open 3rd session now with admin replicaSet:-
+    mongodb://admin:Admin%40123@localhost:31969/admin?replicaSet=mongocluster2  ( not working)
+	Error:-
+	Please enter a MongoDB connection string (Default: mongodb://localhost/): mongodb://admin:Admin%40123@localhost:31969/admin?replicaSet=mongocluster2
+mongodb://admin:Admin%40123@localhost:31969/admin?replicaSet=mongocluster2
+Current Mongosh Log ID: 6972279f96c75fb150628c9f
+Connecting to:          mongodb://<credentials>@localhost:31969/admin?replicaSet=mongocluster2&serverSelectionTimeoutMS=2000&appName=mongosh+2.6.0
+MongoNetworkError: getaddrinfo ENOTFOUND mongocluster2-1.mongocluster2-svc.mongod2.svc.cluster.local
+Press any key to exit:
+	
+
+Point to Note:-  With replicaSet=mongocluster2---its not worked 
+mongodb://admin:Admin%40123@localhost:30181/admin?replicaSet=mongocluster2  ( not worked )
+
+lets try this hybrid URI
+mongodb://admin:Admin%40123@localhost:30181/admin?replicaSet=mongocluster2&readPreference=primary&directConnection=false"     ( Not worked )
+
+D) testing write functionality
+	a) Write also working now from localhost machine with directConnection=true
+
+
+Your exact problem now:-
+You have:
+NodePort service exposing MongoDB (30181)
+SSH tunnel from local → jump → NodePort
+Auth working
+
+But:
+Replica set advertises internal K8s DNS
+You connect to a secondary
+Writes fail with NotWritablePrimary
+
+✅ The ONLY correct solution for your problem is:-
+
+kubectl exec -it mongocluster2-0 -n mongod2 -- \
+  mongosh -u admin -p 'Admin@123' --authenticationDatabase admin
+
+cfg= rs.conf()
+cfg.members[0].host = "10.157.237.111:30181"
+cfg.members[1].host = "10.157.237.111:30181"
+mongocluster2 [direct: primary] test> rs.reconfig(cfg, { force: true })
+{
+  ok: 1,
+  '$clusterTime': {
+    clusterTime: Timestamp({ t: 1769087070, i: 1 }),
+    signature: {
+      hash: Binary.createFromBase64('vAHK2vdVI8CfT6MEcIYYPyJu1Fk=', 0),
+      keyId: Long('7597401395452444678')
+    }
+  },
+  operationTime: Timestamp({ t: 1769087070, i: 1 })
+}
+
+
+Retried with correct node port - 31969.
+cfg= rs.conf()
+mongocluster2 [direct: primary] test> cfg.members[0].host = "10.157.237.111:31969"
+10.157.237.111:31969
+mongocluster2 [direct: primary] test> cfg.members[1].host = "10.157.237.111:31969"
+10.157.237.111:31969
+
+
+
+23/01/2026:-
+1. trying to expose mongodb cluster2 pods via yaml files:- 
+kubectl apply -f mongocluster2-0-nodeport.yaml
+kubectl apply -f mongocluster2-1-nodeport.yaml
+
+mongocluster2 [direct: primary] orders> cfg.members[0].host = "10.157.237.111:30181"
+10.157.237.111:30181
+mongocluster2 [direct: primary] orders> cfg.members[1].host = "10.157.237.111:30182"
+10.157.237.111:30182
+mongocluster2 [direct: primary] orders> rs.reconfig(cfg)
+
+
+
+2. 
+

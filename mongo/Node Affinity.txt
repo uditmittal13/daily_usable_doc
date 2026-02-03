@@ -1,0 +1,41 @@
+Applying Node affinity 
+
+1. Firstly, adding labels to nodes those I want to taka part in node affinity.
+Syntax:- kubectl label node nodename labelKey=labelValue
+		kubectl label node dbaasworker2 node-role=dbmongo
+		kubectl label node dbaasworker4 node-role=dbmongo
+ 
+
+Step 2. Apply node affinity in MongoDBCommunity
+
+spec:
+  statefulSet:
+    spec:
+      template:
+        spec:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: node-role
+                        operator: In
+                        values:
+                          - dbmongo
+ 
+ 
+
+Logs After applying node affinity :- 
+Note :- ( from these logs after applying yaml changes, it's first deleting the ine pod that didn't match node-role=dbmongo, and trying to recreate the pod on another node)
+root@dnddbaas2609m0:/home/k8user/udit/op2# kubectl get events -n mongod2 -w
+LAST SEEN   TYPE      REASON                   OBJECT                       MESSAGE
+3m41s       Normal    EnsuringLoadBalancer     service/mongocluster2-0-lb   Ensuring load balancer
+3m41s       Warning   SyncLoadBalancerFailed   service/mongocluster2-0-lb   Error syncing load balancer: failed to ensure load balancer: no address pools could be found
+46s         Normal    Killing                  pod/mongocluster2-1          Stopping container mongod
+46s         Normal    Killing                  pod/mongocluster2-1          Stopping container mongodb-agent
+33s         Warning   Unhealthy                pod/mongocluster2-1          Readiness probe errored: rpc error: code = Unknown desc = failed to exec in container: container is in CONTAINER_EXITED state
+22s         Normal    SuccessfulDelete         statefulset/mongocluster2    delete Pod mongocluster2-1 in StatefulSet mongocluster2 successful
+24s         Warning   Unhealthy                pod/mongocluster2-1          Readiness probe errored: rpc error: code = Unknown desc = failed to exec in container: container is in CONTAINER_EXITED state
+0s          Warning   FailedScheduling         pod/mongocluster2-1          0/4 nodes are available: 1 node(s) didn't match Pod's node affinity/selector, 1 node(s) were unschedulable, 2 Insufficient cpu. preemption: 0/4 nodes are available: 2 No preemption victims found for incoming pod, 2 Preemption is not helpful for scheduling.
+1s          Normal    SuccessfulCreate         statefulset/mongocluster2    create Pod mongocluster2-1 in StatefulSet mongocluster2 successful
+0s          Warning   FailedScheduling         pod/mongocluster2-1          0/4 nodes are available: 1 node(s) didn't match Pod's node affinity/selector, 1 node(s) were unschedulable, 2 Insufficient cpu. preemption: 0/4 nodes are available: 2 No preemption victims found for incoming pod, 2 Preemption is not helpful for scheduling. 

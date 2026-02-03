@@ -1,0 +1,47 @@
+What you actually need to do (step by step)
+
+Case1:- Existing Mongodb k8 operator will manage new mongo cluster.
+
+1️. Create a new MongoDBCommunity YAML file
+
+Example: mongo-cluster2.yaml
+
+apiVersion: mongodbcommunity.mongodb.com/v1
+kind: MongoDBCommunity
+metadata:
+  name: mongoclt2
+  namespace: mongod
+spec:
+  members: 3
+  type: ReplicaSet
+  version: "6.0.6"
+  security:
+    authentication:
+      modes: ["SCRAM"]
+  users:
+    - name: adminclt2
+      db: admin
+      passwordSecretRef:
+        name: mongo-adminclt2-password
+      scramCredentialsSecretName: adminclt2-scram-credentials
+      roles:
+        - name: root
+          db: admin
+		  
+
+2️. Create password secret for the new cluster  ( we can setup this yaml file also ,)
+via cmd:-
+kubectl create secret generic mongo-adminclt2-password --from-literal=password=Admin@123 -n mongod
+Via yaml file:-
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongo-adminclt2-password
+  namespace: mongod
+type: Opaque
+stringData:
+  password: Admin@123
+
+
+3️⃣ Apply the new MongoDBCommunity resource
+kubectl apply -f mongo-cluster2.yaml
