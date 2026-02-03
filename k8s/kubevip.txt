@@ -1,0 +1,16 @@
+1.
+k edit cm kubevip -n kube-system 
+kubectl edit configmap kubevip -n kube-system
+
+Elaborate:-
+kubectl- The Kubernetes CLI tool. Used to interact with the Kubernetes API Server
+edit - Allows you to modify a Kubernetes object directly
+cm - stands for configmap. ConfigMaps store: Configuration values ,Environment variables ,App settings (like kube-vip behavior)
+kubevip -  Name of the ConfigMap. Typically used by kube-vip to store settings such as: VIP address ,  Interface name ,ARP / BGP mode ,Control-plane or service mode.
+-n kubesystem - specifies the namespace , kube-system is reserved for: Core Kubernetes components , Networking, DNS, CNI, kube-vip, etc
+
+
+### Understand below documents
+https://kube-vip.io/
+https://kube-vip.io/docs
+https://wiki.openstack.org/wiki/Neutron
