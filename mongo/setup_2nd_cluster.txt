@@ -1,0 +1,97 @@
+## Steps
+1st step:-
+   Deploy the crd yaml file ( custom resource definiton for mongodbcomunity.mongodb)
+2nd step:-
+    created separate new namespace for deploying mongok8operator and mongo cluster
+3rd Step:-
+## Define rbac yamls for your cluster and deploy it in specific namesapce. ( where directory contains kcustomize.file in which each yaml there).
+   kubectl apply -k directory_name
+   
+4th Step:-
+## Readiness of mongomanager.yaml ( i.e deployment file for new operator setup, having all details of image pulling/ opertor name/ which namespace & pod to watch by operator/
+agent image/ readiness probe /mongo db image /mongo repo url/image pull policy/resources details like cpu and memory/ service account name)
+   Be careful while you deploy this file, dont forget to mention it deploy in specifc namespace which you are targeting for your cluster
+   kubectl apply -f mongomanager.yaml -n namespace
+   
+5th step:-  (
+## Readiness of yaml to setup the mongo cluster ( which describes no of replicas, namespace, version, secuirty authentication-scram,users[passwordsecretRef,scram credentials])
+   mongo-cluster.yaml
+   
+6th step:-
+## create secret for mongo-admin-password.  ( Must step)
+kubectl create secret generic mongo-admin-password --from-literal=password=Admin@123 -n mongod2
+
+Note:- All Required yamls are attached here in the same folder.
+
+
+
+@@@@@@@@@ I worked with below things:-
+
+## operator 2 setup for 2nd mongo cluster with namespace.
+namespace mongod2.
+mongoclustr name - mongocluster2
+service_account setup.
+
+## Secret creation must during mongo cluster setup.
+kubectl create secret generic mongo-admin-password --from-literal=password=Admin@123 -n mongod2
+
+##connect to cluster pod :-
+kubectl exec -it podName -n namespace -- mongosh -u username -p --authenticationDatabase admin
+Ex:- kubectl exec -it mongocluster2-0 -n mongod2 -- mongosh -u admin -p --authenticationDatabase admin
+
+#### created mongo database with some dummy data and one specific user for this database.
+1. create new database.
+   use orders
+2. create collection.
+   db.createCollection("customer_orders")
+3. Insert Dummy Data.
+    db.customer_orders.insertMany([
+  {
+    order_id: "ORD-1001",
+    customer: "Alice",
+    company: "Acme Corp",
+    product: "Laptop",
+    quantity: 2,
+    price: 1200,
+    status: "Shipped",
+    order_date: new Date("2026-01-10")
+  },
+  {
+    order_id: "ORD-1002",
+    customer: "Bob",
+    company: "Globex Ltd",
+    product: "Monitor",
+    quantity: 5,
+    price: 300,
+    status: "Processing",
+    order_date: new Date("2026-01-12")
+  },
+  {
+    order_id: "ORD-1003",
+    customer: "Charlie",
+    company: "Initech",
+    product: "Keyboard",
+    quantity: 10,
+    price: 50,
+    status: "Delivered",
+    order_date: new Date("2026-01-13")
+  }
+])
+4. Verify Data.
+   db.customer_orders.find().pretty()
+5. (Optional ) Create a database user for this DB
+  use orders
+
+db.createUser({
+  user: "orders_app_user",
+  pwd: "Orders@123",
+  roles: [
+    { role: "readWrite", db: "orders" }
+  ]
+})
+6. Test login as orders_app_user
+   kubectl exec -it mongocluster2-0 -n mongod2 -- mongosh -u orders_app_user -p --authenticationDatabase orders
+   
+
+
+
